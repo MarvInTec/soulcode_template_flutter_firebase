@@ -24,18 +24,18 @@ class UserController extends ChangeNotifier {
     });
   }
 
-  void login(String email, String senha) async {
+  Future<void> login(String email, String senha) async {
     await _auth.signInWithEmailAndPassword(
       email: email,
       password: senha,
     );
   }
 
-  void logout() async {
+  Future<void> logout() async {
     await _auth.signOut();
   }
 
-  void signup(
+  Future<void> signup(
     String email,
     String senha,
     Map<String, dynamic> payload,
