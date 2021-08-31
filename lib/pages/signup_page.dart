@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/user_model.dart';
 import '../controllers/user_controller.dart';
 
 class SignupPage extends StatefulWidget {
@@ -43,11 +44,8 @@ class _SignupPageState extends State<SignupPage> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  /// Informações que vão para o firebase
-                  final payload = {
-                    'nome': nome,
-                  };
-                  await userController.signup(email, senha, payload);
+                  final user = UserModel(nome: nome);
+                  await userController.signup(email, senha, user);
 
                   Navigator.pop(context);
                 },

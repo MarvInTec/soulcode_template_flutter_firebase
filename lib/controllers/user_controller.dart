@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../models/user_model.dart';
 
 /// signed - usuário logado
 /// unsigned - usuário deslogado
@@ -10,6 +12,7 @@ class UserController extends ChangeNotifier {
   AuthState authState = AuthState.loading;
 
   final _auth = FirebaseAuth.instance;
+  final _db = FirebaseFirestore.instance;
 
   User? get user => _auth.currentUser;
 
@@ -38,12 +41,17 @@ class UserController extends ChangeNotifier {
   Future<void> signup(
     String email,
     String senha,
-    Map<String, dynamic> payload,
+    UserModel payload,
   ) async {
     final credentials = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: senha,
     );
-    /// TODO: salvar o payload no firestore.
+    final uid = credentials.user?.uid;
+    final data = payload.toMap();
+    data['key'] = uid;
+
+    final doc = _db.collection('usuarios').doc(uid);
+    await doc.set(data);
   }
 }
