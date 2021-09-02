@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../controllers/user_controller.dart';
 import 'signup_page.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String email = "";
   String senha = "";
+
+  // Estados
+  String error = "";
 
   late final userController = Provider.of<UserController>(
     context,
@@ -39,7 +44,25 @@ class _LoginPageState extends State<LoginPage> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  await userController.login(email, senha);
+                  try {
+                    await userController.login(email, senha);
+                  } on FirebaseAuthException catch (e) {
+                    var msg = "";
+
+                    if (e.code == "wrong-password") {
+                      msg = "A senha está incorreta";
+                    }else if(e.code == "invalid-email"){
+                      msg = "Email inválido";
+                    } else{
+                      msg = "Ocorreu um erro";
+                    }
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(msg),
+                      ),
+                    );
+                  }
                 },
                 child: Text("Login"),
               ),
