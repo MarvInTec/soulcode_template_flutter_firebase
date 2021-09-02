@@ -40,4 +40,9 @@ class DiarioModel {
         'diario': diario,
         'imagem': imagem != null ? Blob(imagem!) : null,
       };
+
+  @override
+  String toString() {
+    return 'DiarioModel(key: $key, ownerKey: $ownerKey, titulo: $titulo, autor: $autor, local: $local, diario: $diario)';
+  }
 }
