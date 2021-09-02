@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soulcode_template_flutter_firebase/models/diario_model.dart';
+import 'package:soulcode_template_flutter_firebase/models/user_model.dart';
 import 'edit_diario_page.dart';
 import 'add_diario.dart';
 import '../controllers/user_controller.dart';
@@ -20,6 +21,32 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              future: FirebaseFirestore.instance
+                  .collection('usuarios')
+                  .doc(userController.user!.uid)
+                  .get(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return DrawerHeader(
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+
+                final user = UserModel.fromMap(snapshot.data!.data()!);
+
+                return UserAccountsDrawerHeader(
+                  accountName: Text(user.nome),
+                  accountEmail: Text(userController.user!.email!),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text("Home"),
         actions: [
