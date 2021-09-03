@@ -24,25 +24,29 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: ListView(
           children: [
-            FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-              future: FirebaseFirestore.instance
-                  .collection('usuarios')
-                  .doc(userController.user!.uid)
-                  .get(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return DrawerHeader(
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
+            // FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            //   future: FirebaseFirestore.instance
+            //       .collection('usuarios')
+            //       .doc(userController.user!.uid)
+            //       .get(),
+            //   builder: (context, snapshot) {
+            //     if (!snapshot.hasData) {
+            //       return DrawerHeader(
+            //         child: Center(child: CircularProgressIndicator()),
+            //       );
+            //     }
 
-                final user = UserModel.fromMap(snapshot.data!.data()!);
+            //     final user = UserModel.fromMap(snapshot.data!.data()!);
 
-                return UserAccountsDrawerHeader(
-                  accountName: Text(user.nome),
-                  accountEmail: Text(userController.user!.email!),
-                );
-              },
+            //     return UserAccountsDrawerHeader(
+            //       accountName: Text(user.nome),
+            //       accountEmail: Text(userController.user!.email!),
+            //     );
+            //   },
+            // ),
+            UserAccountsDrawerHeader(
+              accountName: Text(userController.model.nome),
+              accountEmail: Text(userController.user!.email!),
             ),
           ],
         ),
@@ -61,7 +65,6 @@ class _HomePageState extends State<HomePage> {
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance
             .collection('diarios')
-            .orderBy('titulo')
             .where('ownerKey', isEqualTo: userController.user!.uid)
             .snapshots(),
         builder: (context, snapshot) {
