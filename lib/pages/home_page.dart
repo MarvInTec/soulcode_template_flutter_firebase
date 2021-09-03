@@ -2,10 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soulcode_template_flutter_firebase/models/diario_model.dart';
-import 'package:soulcode_template_flutter_firebase/models/user_model.dart';
+import 'package:soulcode_template_flutter_firebase/pages/list_usuarios_page.dart';
 import 'edit_diario_page.dart';
 import 'add_diario.dart';
 import '../controllers/user_controller.dart';
+
+/// Exercício - Crie uma tela separada para listar os usuários.
+/// -----> USANDO FUTURE BUILDER <-----
+/// Destacar o usuário que está logado.
 
 class HomePage extends StatefulWidget {
   @override
@@ -47,6 +51,18 @@ class _HomePageState extends State<HomePage> {
             UserAccountsDrawerHeader(
               accountName: Text(userController.model.nome),
               accountEmail: Text(userController.user!.email!),
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text("Usuários"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ListUsuariosPage(),
+                  ),
+                );
+              },
             ),
           ],
         ),
